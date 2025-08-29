@@ -2,6 +2,7 @@
 
 #import libraries
 import pygame
+import random
 
 #initialise pygame
 pygame.init()
@@ -20,6 +21,7 @@ FPS = 60
 
 #game variables
 GRAVITY = 1
+FRICTION = 0.9
 
 #colour
 WHITE = (255, 255, 255)
@@ -38,6 +40,7 @@ class Player():
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.center = (x, y)
         self.vel_y = 0
+        self.vel_x = 0
         self.flip = False
 
     def move(self):
@@ -48,11 +51,14 @@ class Player():
         #process keypresses
         key = pygame.key.get_pressed()
         if key[pygame.K_a]:
-            dx = -10
+            self.vel_x = -10
             self.flip = True
         if key[pygame.K_d]:
-            dx = 10
+            self.vel_x = 10
             self.flip = False
+
+        self.vel_x = self.vel_x * FRICTION
+        dx += self.vel_x
 
         #gravity
         self.vel_y += GRAVITY
@@ -81,6 +87,8 @@ class Player():
         pygame.draw.rect(screen, WHITE, self.rect, 2)
 
 
+
+#player instance
 player = Player(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
 #game loop
